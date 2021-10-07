@@ -8,9 +8,7 @@ const Https = require('https');
 const Logger = require('./node_core_logger');
 const NodeRtmpServer = require('./node_rtmp_server');
 const NodeHttpServer = require('./node_http_server');
-const NodeTransServer = require('./node_trans_server');
-const NodeRelayServer = require('./node_relay_server');
-const NodeFissionServer = require('./node_fission_server');
+const NodeLoginServer = require('./node_login_server');//로그인 관련 모듈
 const context = require('./node_core_ctx');
 const Package = require('../package.json');
 
@@ -32,31 +30,19 @@ class NodeMediaServer {
       this.nhs.run();
     }
 
-    if (this.config.trans) {
-      if (this.config.cluster) {
-        Logger.log('NodeTransServer does not work in cluster mode');
-      } else {
-        this.nts = new NodeTransServer(this.config);
-        this.nts.run();
-      }
+    /*로그인 모듈 실행
+    - config에 login 정보가 있어야 하므로
+    app.js에 
+    
+    login: {
+        port: 3000
     }
 
-    if (this.config.relay) {
-      if (this.config.cluster) {
-        Logger.log('NodeRelayServer does not work in cluster mode');
-      } else {
-        this.nls = new NodeRelayServer(this.config);
-        this.nls.run();
-      }
-    }
-
-    if (this.config.fission) {
-      if (this.config.cluster) {
-        Logger.log('NodeFissionServer does not work in cluster mode');
-      } else {
-        this.nfs = new NodeFissionServer(this.config);
-        this.nfs.run();
-      }
+    추가
+    */
+    if (this.config.login) {
+      this.n3s = new NodeLoginServer(this.config);
+      this.n3s.run();
     }
 
     process.on('uncaughtException', function (err) {
@@ -99,12 +85,7 @@ class NodeMediaServer {
     if (this.nhs) {
       this.nhs.stop();
     }
-    if (this.nls) {
-      this.nls.stop();
-    }
-    if (this.nfs) {
-      this.nfs.stop();
-    }
+
   }
 
   getSession(id) {

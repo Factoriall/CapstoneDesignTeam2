@@ -7,6 +7,7 @@
 const QueryString = require('querystring');
 const AV = require('./node_core_av');
 const { AUDIO_SOUND_RATE, AUDIO_CODEC_NAME, VIDEO_CODEC_NAME } = require('./node_core_av');
+const exec = require('child_process').exec;
 
 const AMF = require('./node_core_amf');
 const Handshake = require('./node_rtmp_handshake');
@@ -744,6 +745,15 @@ class NodeRtmpSession {
           this.videoWidth
         }x${this.videoHeight}`
       );
+
+      //실제 파이썬 파일이 실행되는 부분
+      const python = require('child_process').exec('python [파이썬 파일] ' 
+      + "rtmp://[주소]" + this.publishStreamPath)
+
+      python.on('exit', function () {
+        //스트림이 끊길 때 python 파일도 끊김
+        console.log("python file finished")
+      });
     }
 
     let packet = RtmpPacket.create();
