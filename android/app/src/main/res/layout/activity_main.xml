@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,31 +8,39 @@
     android:orientation="vertical">
 
   <TextView
-      android:id="@+id/tv_version"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginRight="8dp"
-      android:textColor="@color/appColor"
-      android:textSize="12sp" />
+      android:layout_marginTop="70dp"
+      android:text="@string/app_name"
+      android:textSize="30sp" />
 
-  <TextView
-      android:id="@+id/tv_select"
+  <com.jaredrummler.android.widget.AnimatedSvgView
+      android:id="@+id/animated_svg_view2"
+      android:layout_width="180dp"
+      android:layout_height="180dp"
+      android:layout_gravity="center"
+      android:layout_marginTop="70dp"
+      app:animatedSvgFillColors="@array/taegwondo_glyph_colors"
+      app:animatedSvgFillStart="1200"
+      app:animatedSvgFillTime="1000"
+      app:animatedSvgGlyphStrings="@array/taegwondo_glyph_strings"
+      app:animatedSvgImageSizeX="400"
+      app:animatedSvgImageSizeY="400"
+      app:animatedSvgTraceMarkerLength="50"
+      app:animatedSvgTraceTime="2000"
+      app:animatedSvgTraceTimePerGlyph="1000"/>
+
+  <Spinner
+      android:id="@+id/spinner"
+      android:layout_marginTop="100dp"
       android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginLeft="8dp"
-      android:layout_marginTop="8dp"
-      android:layout_marginRight="8dp"
-      android:text="@string/tv_select"
-      android:textColor="@color/appColor"
-      android:textSize="22sp" />
+      android:layout_height="wrap_content" />
 
   <Button
-      android:id="@+id/b_rtmp"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="300dp"
-      android:text="@string/default_rtmp" />
+      android:id="@+id/buttonEvaluation"
+      android:layout_width="140dp"
+      android:layout_height="40dp"
+      android:layout_marginTop="40dp"
+      android:text="@string/start_evaluation" />
 
 </LinearLayout>

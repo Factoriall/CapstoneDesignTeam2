@@ -26,10 +26,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.jaredrummler.android.widget.AnimatedSvgView;
 import com.pedro.rtpstreamer.defaultexample.ExampleRtmpActivity;
 import com.pedro.rtpstreamer.utils.ActivityLink;
 
@@ -38,8 +41,13 @@ import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR2;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+  private Button btEvaluation;
   private ActivityLink link;
+  private AnimatedSvgView svgView;
+  private Spinner spinner;
+  private ArrayAdapter<String> adapter;
+  private String[] items;
+  private String selectedPoomsae;
 
   private final String[] PERMISSIONS = {
       Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA,
@@ -51,11 +59,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     overridePendingTransition(R.transition.slide_in, R.transition.slide_out);
-    TextView tvVersion = findViewById(R.id.tv_version);
-    tvVersion.setText(getString(R.string.version, BuildConfig.VERSION_NAME));
 
-    Button button = findViewById(R.id.b_rtmp);
-    button.setOnClickListener(this);
+    btEvaluation = findViewById(R.id.buttonEvaluation);
+    btEvaluation.setOnClickListener(this);
+
+    svgView = (AnimatedSvgView) findViewById(R.id.animated_svg_view2);
+    svgView.start();
+
+    items = getResources().getStringArray(R.array.poomsae_array);
+    spinner = findViewById(R.id.spinner);
+    adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
+    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    spinner.setAdapter(adapter);
+
+    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        selectedPoomsae = items[i];
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> adapterView) {
+
+      }
+    });
 
     if (!hasPermissions(this, PERMISSIONS)) {
       ActivityCompat.requestPermissions(this, PERMISSIONS, 1);
@@ -64,12 +91,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   public void onClick(View view) {
     switch (view.getId()) {
-      case R.id.b_rtmp:
+      case R.id.buttonEvaluation:
         link = new ActivityLink(new Intent(this, ExampleRtmpActivity.class),
                 getString(R.string.default_rtmp), JELLY_BEAN);
         if (hasPermissions(this, PERMISSIONS)) {
           int minSdk = link.getMinSdk();
           if (Build.VERSION.SDK_INT >= minSdk) {
+            link.getIntent().putExtra("SelectedPoomsae", selectedPoomsae);
             startActivity(link.getIntent());
             overridePendingTransition(R.transition.slide_in, R.transition.slide_out);
           } else {

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="poomsae_array">
+        <item>-- Select Poomsae --</item>
+        <item>태극 1장</item>
+    </string-array>
+</resources>
