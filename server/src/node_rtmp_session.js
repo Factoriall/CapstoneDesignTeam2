@@ -746,14 +746,16 @@ class NodeRtmpSession {
         }x${this.videoHeight}`
       );
 
+      
       //실제 파이썬 파일이 실행되는 부분
-      const python = require('child_process').exec('python [파이썬 파일] ' 
-      + "rtmp://[주소]" + this.publishStreamPath)
-
-      python.on('exit', function () {
-        //스트림이 끊길 때 python 파일도 끊김
-        console.log("python file finished")
-      });
+      
+      const python = require('child_process').exec('python [파이썬 파일] '
+-      + "rtmp://[주소]" + this.publishStreamPath)
+-
+-     python.on('exit', function () {
+-       //스트림이 끊길 때 python 파일도 끊김
+-       console.log("python file finished")
+      })
     }
 
     let packet = RtmpPacket.create();
