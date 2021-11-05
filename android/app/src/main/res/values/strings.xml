@@ -1,12 +1,12 @@
 <resources>
-  <string name="app_name">Poomsae Master</string>
+  <string name="app_name">POOMSAE MASTER</string>
   <string name="version">Version: %1$s</string>
 
   <string name="prompt_email">Email</string>
   <string name="prompt_name">Name</string>
   <string name="prompt_password">Password</string>
-  <string name="action_log_in">Log in</string>
-  <string name="action_sign_up">Sign Up</string>
+  <string name="action_log_in">LOG IN</string>
+  <string name="action_sign_up">SIGN UP</string>
   <string name="action_register">Register</string>
 
   <string name="select_poomsae">Select Poomsae</string>
@@ -177,23 +177,23 @@
     <item>M6.667000000000002,45.26a22.24,22.24 0 1,0 44.48,0a22.24,22.24 0 1,0 -44.48,0</item>
   </string-array>
   <integer-array name="taegwondo_glyph_colors">
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
-    <item>@android:color/black</item>
+    <item>@color/red</item>
+    <item>@color/red</item>
+    <item>@color/colorPrimaryDark</item>
+    <item>@color/colorPrimaryDark</item>
+    <item>@color/colorPrimaryDark</item>
+    <item>@color/colorPrimaryDark</item>
+    <item>@color/colorPrimaryDark</item>
+    <item>@color/colorPrimaryDark</item>
+    <item>@color/red</item>
+    <item>@color/red</item>
+    <item>@color/colorPrimaryDark</item>
+    <item>@color/colorPrimaryDark</item>
+    <item>@color/red</item>
+    <item>@color/red</item>
+    <item>@color/red</item>
+    <item>@color/red</item>
+    <item>@color/red</item>
+    <item>@color/colorPrimaryDark</item>
   </integer-array>
 </resources>

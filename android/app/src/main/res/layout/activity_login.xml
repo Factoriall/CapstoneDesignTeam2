@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorAccent">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -18,13 +19,16 @@
             android:layout_marginTop="70dp"
             android:layout_gravity="center"
             android:text="@string/action_log_in"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:textColor='@color/appColor' />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="120dp"
-            android:text="@string/prompt_email" />
+            android:text="@string/prompt_email"
+            android:textSize="18sp"
+            android:textColor='@color/appColor' />
 
         <EditText
             android:id="@+id/etLoginEmail"
@@ -37,7 +41,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:text="@string/prompt_password" />
+            android:text="@string/prompt_password"
+            android:textSize="18sp"
+            android:textColor='@color/appColor' />
 
         <EditText
             android:id="@+id/etLoginPassword"

@@ -19,12 +19,15 @@ package com.pedro.rtpstreamer.defaultexample;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.CountDownTimer;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.pedro.encoder.input.video.CameraOpenException;
 import com.pedro.rtmp.utils.ConnectCheckerRtmp;
@@ -48,11 +51,13 @@ public class ExampleRtmpActivity extends AppCompatActivity
 
   private RtmpCamera1 rtmpCamera1;
   private Button button;
-  private Button bRecord;
   private EditText etUrl;
 
   private String currentDateAndTime = "";
   private File folder;
+
+  private TextView tvCount;
+  private CountDownTimer timer;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +68,6 @@ public class ExampleRtmpActivity extends AppCompatActivity
     SurfaceView surfaceView = findViewById(R.id.surfaceView);
     button = findViewById(R.id.b_start_stop);
     button.setOnClickListener(this);
-    bRecord = findViewById(R.id.b_record);
-    bRecord.setOnClickListener(this);
     Button switchCamera = findViewById(R.id.switch_camera);
     switchCamera.setOnClickListener(this);
     etUrl = findViewById(R.id.et_rtp_url);
@@ -72,6 +75,21 @@ public class ExampleRtmpActivity extends AppCompatActivity
     rtmpCamera1 = new RtmpCamera1(surfaceView, this);
     rtmpCamera1.setReTries(10);
     surfaceView.getHolder().addCallback(this);
+
+    tvCount = findViewById(R.id.tv_countdown);
+
+    timer = new CountDownTimer(5000, 1000) {
+      @Override
+      public void onTick(long l) {
+        tvCount.setText(String.valueOf(l/1000+1));
+      }
+
+      @Override
+      public void onFinish() {
+        tvCount.setText("");
+        rtmpCamera1.startStream(etUrl.getText().toString());
+      }
+    };
   }
 
   @Override
@@ -148,8 +166,8 @@ public class ExampleRtmpActivity extends AppCompatActivity
         if (!rtmpCamera1.isStreaming()) {
           if (rtmpCamera1.isRecording()
               || rtmpCamera1.prepareAudio() && rtmpCamera1.prepareVideo()) {
+            timer.start();
             button.setText(R.string.stop_button);
-            rtmpCamera1.startStream(etUrl.getText().toString());
           } else {
             Toast.makeText(this, "Error preparing stream, This device cant do it",
                 Toast.LENGTH_SHORT).show();
@@ -166,49 +184,7 @@ public class ExampleRtmpActivity extends AppCompatActivity
           Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         break;
-      case R.id.b_record:
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-          if (!rtmpCamera1.isRecording()) {
-            try {
-              if (!folder.exists()) {
-                folder.mkdir();
-              }
-              SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
-              currentDateAndTime = sdf.format(new Date());
-              if (!rtmpCamera1.isStreaming()) {
-                if (rtmpCamera1.prepareAudio() && rtmpCamera1.prepareVideo()) {
-                  rtmpCamera1.startRecord(
-                      folder.getAbsolutePath() + "/" + currentDateAndTime + ".mp4");
-                  bRecord.setText(R.string.stop_record);
-                  Toast.makeText(this, "Recording... ", Toast.LENGTH_SHORT).show();
-                } else {
-                  Toast.makeText(this, "Error preparing stream, This device cant do it",
-                      Toast.LENGTH_SHORT).show();
-                }
-              } else {
-                rtmpCamera1.startRecord(
-                    folder.getAbsolutePath() + "/" + currentDateAndTime + ".mp4");
-                bRecord.setText(R.string.stop_record);
-                Toast.makeText(this, "Recording... ", Toast.LENGTH_SHORT).show();
-              }
-            } catch (IOException e) {
-              rtmpCamera1.stopRecord();
-              bRecord.setText(R.string.start_record);
-              Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-          } else {
-            rtmpCamera1.stopRecord();
-            bRecord.setText(R.string.start_record);
-            Toast.makeText(this,
-                "file " + currentDateAndTime + ".mp4 saved in " + folder.getAbsolutePath(),
-                Toast.LENGTH_SHORT).show();
-            currentDateAndTime = "";
-          }
-        } else {
-          Toast.makeText(this, "You need min JELLY_BEAN_MR2(API 18) for do it...",
-              Toast.LENGTH_SHORT).show();
-        }
-        break;
+
       default:
         break;
     }
@@ -226,14 +202,6 @@ public class ExampleRtmpActivity extends AppCompatActivity
 
   @Override
   public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 && rtmpCamera1.isRecording()) {
-      rtmpCamera1.stopRecord();
-      bRecord.setText(R.string.start_record);
-      Toast.makeText(this,
-          "file " + currentDateAndTime + ".mp4 saved in " + folder.getAbsolutePath(),
-          Toast.LENGTH_SHORT).show();
-      currentDateAndTime = "";
-    }
     if (rtmpCamera1.isStreaming()) {
       rtmpCamera1.stopStream();
       button.setText(getResources().getString(R.string.start_button));
