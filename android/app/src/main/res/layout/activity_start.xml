@@ -5,21 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorAccent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:text="@string/app_name"
+        android:textColor='@color/appColor'
         android:textSize="30sp" />
 
     <com.jaredrummler.android.widget.AnimatedSvgView
         android:id="@+id/animated_svg_view"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:layout_marginTop="70dp"
+        android:layout_marginLeft="20dp"
         app:animatedSvgFillColors="@array/taegwondo_glyph_colors"
         app:animatedSvgFillStart="1200"
         app:animatedSvgFillTime="1000"
