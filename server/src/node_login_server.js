@@ -12,7 +12,6 @@ var connection = mysql.createConnection({
     user     : db_config.user,
     password : db_config.password,
     database : db_config.database,
-    port     : db_config.port
 });
 
 //로그인 및 회원가입 구현 파트
@@ -56,6 +55,20 @@ class NodeLoginServer {
                 });
             });
         });
+
+	app.post('/user/join', function(req, res){
+	    console.log(req.body);	    
+/*	    var userEmail = req.body.userEmail;
+	    var userName = req.body.userEmail;
+	    connection.query(sql, userEmail, userName, function(err, result){
+
+	    });
+*/	    res.json({
+		'code': 200,
+		'message': 'test'
+	    });
+	});
+
     }
 
     run() {
