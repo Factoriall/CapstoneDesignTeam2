@@ -10,16 +10,14 @@
       android:id="@+id/surfaceView"
       />
 
-  <EditText
-      android:textColor="@color/appColor"
-      android:textColorHint="@color/appColor"
-      android:inputType="textUri"
+  <TextView
+      android:id="@+id/tv_poomsae"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:gravity="center"
       android:layout_margin="20dp"
-      android:id="@+id/et_rtp_url"
-      />
+      android:textSize="18sp"
+      android:textColor='@color/appColor' />
 
   <TextView
       android:id="@+id/tv_countdown"
@@ -40,15 +38,15 @@
 
     <Button
         android:text="@string/start_button"
-        android:layout_width="120dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="40dp"
+        android:layout_marginRight="120dp"
         android:id="@+id/b_start_stop"
         />
 
     <Button
         android:text="@string/switch_camera_button"
-        android:layout_width="120dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:id="@+id/switch_camera"
         />

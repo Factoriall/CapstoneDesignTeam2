@@ -24,6 +24,8 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.view.View;
 
 import android.widget.AdapterView;
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (hasPermissions(this, PERMISSIONS)) {
           int minSdk = link.getMinSdk();
           if (Build.VERSION.SDK_INT >= minSdk) {
-            link.getIntent().putExtra("SelectedPoomsae", selectedPoomsae);
+            link.getIntent().putExtra("selectedPoomsae", selectedPoomsae);
             startActivity(link.getIntent());
             overridePendingTransition(R.transition.slide_in, R.transition.slide_out);
           } else {

@@ -10,12 +10,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.pedro.rtpstreamer.retrofit.SignupData;
+import com.pedro.rtpstreamer.retrofit.SignupResponse;
+import com.pedro.rtpstreamer.retrofit.RetrofitClient;
+import com.pedro.rtpstreamer.retrofit.ServiceApi;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SignupActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText etEmail;
     private EditText etName;
     private EditText etPassword;
     private Button btRegister;
-    //private ServiceApi service;
+    private ServiceApi service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +38,20 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
 
         btRegister.setOnClickListener(this);
 
-        //service = RetrofitClient.getClient().create(ServiceApi.class);
+        service = RetrofitClient.getClient().create(ServiceApi.class);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonRegister:
-                //attemptSignup();
-                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-                startActivity(intent);
+                attemptSignup();
                 break;
             default:
                 break;
         }
     }
-/*
+
     private void attemptSignup() {
         String email = etEmail.getText().toString();
         String name = etName.getText().toString();
@@ -57,6 +64,11 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             public void onResponse(Call<SignupResponse> call, Response<SignupResponse> response) {
                 SignupResponse result = response.body();
                 Toast.makeText(SignupActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+
+                if (result.getCode() == 200) {
+                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
 
             @Override
@@ -66,6 +78,4 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
     }
-    @Override
- */
 }

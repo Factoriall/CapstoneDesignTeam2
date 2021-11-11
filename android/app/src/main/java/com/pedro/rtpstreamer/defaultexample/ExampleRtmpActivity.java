@@ -21,6 +21,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -51,13 +52,17 @@ public class ExampleRtmpActivity extends AppCompatActivity
 
   private RtmpCamera1 rtmpCamera1;
   private Button button;
-  private EditText etUrl;
 
   private String currentDateAndTime = "";
   private File folder;
 
   private TextView tvCount;
   private CountDownTimer timer;
+
+  private String selectedPoomsae;
+  private TextView tvPoomsae;
+
+  private String url = "rtmp://yourendpoint";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +75,14 @@ public class ExampleRtmpActivity extends AppCompatActivity
     button.setOnClickListener(this);
     Button switchCamera = findViewById(R.id.switch_camera);
     switchCamera.setOnClickListener(this);
-    etUrl = findViewById(R.id.et_rtp_url);
-    etUrl.setHint(R.string.hint_rtmp);
     rtmpCamera1 = new RtmpCamera1(surfaceView, this);
     rtmpCamera1.setReTries(10);
     surfaceView.getHolder().addCallback(this);
+
+    selectedPoomsae = getIntent().getStringExtra("selectedPoomsae");
+    Log.i("string check", selectedPoomsae);
+    tvPoomsae = findViewById(R.id.tv_poomsae);
+    tvPoomsae.setText(selectedPoomsae);
 
     tvCount = findViewById(R.id.tv_countdown);
 
@@ -87,7 +95,7 @@ public class ExampleRtmpActivity extends AppCompatActivity
       @Override
       public void onFinish() {
         tvCount.setText("");
-        rtmpCamera1.startStream(etUrl.getText().toString());
+        rtmpCamera1.startStream(url);
       }
     };
   }
