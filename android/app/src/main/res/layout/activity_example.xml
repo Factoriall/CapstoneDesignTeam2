@@ -10,14 +10,28 @@
       android:id="@+id/surfaceView"
       />
 
-  <TextView
-      android:id="@+id/tv_poomsae"
+  <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:gravity="center"
-      android:layout_margin="20dp"
-      android:textSize="18sp"
-      android:textColor='@color/appColor' />
+      android:orientation="horizontal"
+      android:layout_margin="10dp"
+      android:gravity="center">
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="200dp"
+        android:textColor='@color/appColor'
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_poomsae"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor='@color/appColor'
+        android:textSize="18sp"/>
+  </LinearLayout>
 
   <TextView
       android:id="@+id/tv_countdown"

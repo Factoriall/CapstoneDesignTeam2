@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private ArrayAdapter<String> adapter;
   private String[] items;
   private String selectedPoomsae;
+  private String userName;
 
   private final String[] PERMISSIONS = {
       Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA,
@@ -68,11 +69,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     svgView = (AnimatedSvgView) findViewById(R.id.animated_svg_view2);
     svgView.start();
 
+    userName = getIntent().getStringExtra("userName");
+
     items = getResources().getStringArray(R.array.poomsae_array);
     spinner = findViewById(R.id.spinner);
     adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spinner.setAdapter(adapter);
+    selectedPoomsae = null;
 
     spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
@@ -94,19 +98,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   public void onClick(View view) {
     switch (view.getId()) {
       case R.id.buttonEvaluation:
-        link = new ActivityLink(new Intent(this, ExampleRtmpActivity.class),
-                getString(R.string.default_rtmp), JELLY_BEAN);
-        if (hasPermissions(this, PERMISSIONS)) {
-          int minSdk = link.getMinSdk();
-          if (Build.VERSION.SDK_INT >= minSdk) {
-            link.getIntent().putExtra("selectedPoomsae", selectedPoomsae);
-            startActivity(link.getIntent());
-            overridePendingTransition(R.transition.slide_in, R.transition.slide_out);
-          } else {
-            showMinSdkError(minSdk);
-          }
+        if (selectedPoomsae.equals("-- Select Poomsae --") || selectedPoomsae == null) {
+          Toast.makeText(MainActivity.this, "Poomsae is not selected.", Toast.LENGTH_SHORT).show();
         } else {
-          showPermissionsErrorAndRequest();
+          link = new ActivityLink(new Intent(this, ExampleRtmpActivity.class),
+                  getString(R.string.default_rtmp), JELLY_BEAN);
+          if (hasPermissions(this, PERMISSIONS)) {
+            int minSdk = link.getMinSdk();
+            if (Build.VERSION.SDK_INT >= minSdk) {
+              link.getIntent().putExtra("selectedPoomsae", selectedPoomsae);
+              link.getIntent().putExtra("userName", userName);
+              startActivity(link.getIntent());
+              overridePendingTransition(R.transition.slide_in, R.transition.slide_out);
+            } else {
+              showMinSdkError(minSdk);
+            }
+          } else {
+            showPermissionsErrorAndRequest();
+          }
         }
         break;
       default:

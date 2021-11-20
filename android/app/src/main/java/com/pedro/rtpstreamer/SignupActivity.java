@@ -25,6 +25,9 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     private EditText etPassword;
     private Button btRegister;
     private ServiceApi service;
+    private String email;
+    private String name;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +48,25 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonRegister:
-                attemptSignup();
+                email = etEmail.getText().toString();
+                name = etName.getText().toString();
+                password = etPassword.getText().toString();
+                if (email.equals("") || email == null) {
+                    Toast.makeText(SignupActivity.this, "You did not enter an email.", Toast.LENGTH_SHORT).show();
+                } else if (name.equals("") || name == null) {
+                    Toast.makeText(SignupActivity.this, "You did not enter a name.", Toast.LENGTH_SHORT).show();
+                } else if (password.equals("") || password == null) {
+                    Toast.makeText(SignupActivity.this, "You did not enter a password.", Toast.LENGTH_SHORT).show();
+                } else {
+                    attemptSignup(email, name, password);
+                }
                 break;
             default:
                 break;
         }
     }
 
-    private void attemptSignup() {
-        String email = etEmail.getText().toString();
-        String name = etName.getText().toString();
-        String password = etPassword.getText().toString();
-
+    private void attemptSignup(String email, String name, String password) {
         SignupData data = new SignupData(name, email, password);
 
         service.userSignup(data).enqueue(new Callback<SignupResponse>() {
@@ -66,7 +76,7 @@ public class SignupActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(SignupActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
 
                 if (result.getCode() == 200) {
-                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                    Intent intent = new Intent(SignupActivity.this, StartActivity.class);
                     startActivity(intent);
                 }
             }

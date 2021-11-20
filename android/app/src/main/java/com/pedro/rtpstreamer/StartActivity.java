@@ -33,7 +33,6 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonStartLogin:
-                //attemptLogin();
                 Intent intent = new Intent(StartActivity.this, LoginActivity.class);
                 startActivity(intent);
                 break;

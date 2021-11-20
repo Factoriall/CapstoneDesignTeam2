@@ -59,10 +59,11 @@ public class ExampleRtmpActivity extends AppCompatActivity
   private TextView tvCount;
   private CountDownTimer timer;
 
+  private String userName;
+  private TextView tvUserName;
   private String selectedPoomsae;
   private TextView tvPoomsae;
-
-  private String url = "rtmp://yourendpoint";
+  private String url;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +80,15 @@ public class ExampleRtmpActivity extends AppCompatActivity
     rtmpCamera1.setReTries(10);
     surfaceView.getHolder().addCallback(this);
 
+    userName = getIntent().getStringExtra("userName");
+    tvUserName = findViewById(R.id.tv_user_name);
+    tvUserName.setText(userName);
+
     selectedPoomsae = getIntent().getStringExtra("selectedPoomsae");
-    Log.i("string check", selectedPoomsae);
     tvPoomsae = findViewById(R.id.tv_poomsae);
     tvPoomsae.setText(selectedPoomsae);
+
+    url = "rtmp://3.144.208.159:5000/" + userName + "/" + selectedPoomsae;
 
     tvCount = findViewById(R.id.tv_countdown);
 
@@ -94,7 +100,8 @@ public class ExampleRtmpActivity extends AppCompatActivity
 
       @Override
       public void onFinish() {
-        tvCount.setText("");
+        //tvCount.setText("");
+        tvCount.setText(url);
         rtmpCamera1.startStream(url);
       }
     };

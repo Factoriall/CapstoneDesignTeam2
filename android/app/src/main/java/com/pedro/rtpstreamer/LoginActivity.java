@@ -24,8 +24,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText etEmail;
     private EditText etPassword;
     private Button btLogin;
-    private Button btSignup;
     private ServiceApi service;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +46,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonLogin:
-                attemptLogin();
+                email = etEmail.getText().toString();
+                password = etPassword.getText().toString();
+                if (email.equals("") || email == null) {
+                    Toast.makeText(LoginActivity.this, "You did not enter an email.", Toast.LENGTH_SHORT).show();
+                } else if (password.equals("") || password == null) {
+                    Toast.makeText(LoginActivity.this, "You did not enter a password.", Toast.LENGTH_SHORT).show();
+                } else {
+                    attemptLogin(email, password);
+                }
                 break;
             default:
                 break;
         }
     }
 
-    private void attemptLogin() {
-        String email = etEmail.getText().toString();
-        String password = etPassword.getText().toString();
-
+    private void attemptLogin(String email, String password) {
         LoginData data = new LoginData(email, password);
 
         service.userLogin(data).enqueue(new Callback<LoginResponse>() {
@@ -66,6 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if (result.getCode() == 200) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("userName", result.getUserName());
                     startActivity(intent);
                 }
             }

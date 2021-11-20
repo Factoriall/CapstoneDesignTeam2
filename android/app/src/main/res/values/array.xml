@@ -2,6 +2,6 @@
 <resources>
     <string-array name="poomsae_array">
         <item>-- Select Poomsae --</item>
-        <item>태극 1장</item>
+        <item>태극_1장</item>
     </string-array>
 </resources>
