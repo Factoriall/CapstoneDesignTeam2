@@ -16,6 +16,7 @@
 
 package com.pedro.rtpstreamer.defaultexample;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +34,10 @@ import android.widget.Toast;
 import com.pedro.encoder.input.video.CameraOpenException;
 import com.pedro.rtmp.utils.ConnectCheckerRtmp;
 import com.pedro.rtplibrary.rtmp.RtmpCamera1;
+import com.pedro.rtpstreamer.LoginActivity;
+import com.pedro.rtpstreamer.MainActivity;
 import com.pedro.rtpstreamer.R;
+import com.pedro.rtpstreamer.ResultActivity;
 import com.pedro.rtpstreamer.utils.PathUtils;
 
 import java.io.File;
@@ -88,7 +92,7 @@ public class ExampleRtmpActivity extends AppCompatActivity
     tvPoomsae = findViewById(R.id.tv_poomsae);
     tvPoomsae.setText(selectedPoomsae);
 
-    url = "rtmp://3.144.208.159:5000/" + userName + "/" + selectedPoomsae;
+    url = "rtmp://3.144.208.159:1935/live/" + userName + "+" + selectedPoomsae;
 
     tvCount = findViewById(R.id.tv_countdown);
 
@@ -100,8 +104,8 @@ public class ExampleRtmpActivity extends AppCompatActivity
 
       @Override
       public void onFinish() {
-        //tvCount.setText("");
-        tvCount.setText(url);
+        tvCount.setText("");
+        Log.i("Streaming Start", String.valueOf(url));
         rtmpCamera1.startStream(url);
       }
     };
@@ -129,6 +133,8 @@ public class ExampleRtmpActivity extends AppCompatActivity
         if (rtmpCamera1.reTry(5000, reason)) {
           Toast.makeText(ExampleRtmpActivity.this, "Retry", Toast.LENGTH_SHORT)
               .show();
+          Log.e("Streaming Error", reason);
+          Log.e("Streaming Error Url", url);
         } else {
           Toast.makeText(ExampleRtmpActivity.this, "Connection failed. " + reason, Toast.LENGTH_SHORT)
               .show();
@@ -190,6 +196,9 @@ public class ExampleRtmpActivity extends AppCompatActivity
         } else {
           button.setText(R.string.start_button);
           rtmpCamera1.stopStream();
+          Intent intent = new Intent(ExampleRtmpActivity.this, ResultActivity.class);
+          intent.putExtra("userName", userName);
+          startActivity(intent);
         }
         break;
       case R.id.switch_camera:

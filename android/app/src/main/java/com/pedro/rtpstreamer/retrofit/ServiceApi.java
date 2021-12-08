@@ -10,4 +10,7 @@ public interface ServiceApi {
 
     @POST("/user/join")
     Call<SignupResponse> userSignup(@Body SignupData data);
+
+    @POST("/user/result")
+    Call<ResultResponse> userResult(@Body ResultData data);
 }
