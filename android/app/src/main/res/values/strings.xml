@@ -12,6 +12,7 @@
 
     <string name="select_poomsae">Select Poomsae</string>
     <string name="start_evaluation">Start Evaluation</string>
+    <string name="start_check">Check</string>
     <string name="rtsp_streamer">Custom RTSP</string>
     <string name="rtmp_streamer">Custom RTMP</string>
     <string name="default_rtmp">Default RTMP</string>

@@ -13,4 +13,7 @@ public interface ServiceApi {
 
     @POST("/user/result")
     Call<ResultResponse> userResult(@Body ResultData data);
+
+    @POST("/user/pass")
+    Call<PassResponse> userPass(@Body PassData data);
 }

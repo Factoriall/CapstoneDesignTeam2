@@ -18,10 +18,13 @@ package com.pedro.rtpstreamer;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -36,14 +39,25 @@ import android.widget.Toast;
 
 import com.jaredrummler.android.widget.AnimatedSvgView;
 import com.pedro.rtpstreamer.defaultexample.ExampleRtmpActivity;
+import com.pedro.rtpstreamer.retrofit.LoginData;
+import com.pedro.rtpstreamer.retrofit.LoginResponse;
+import com.pedro.rtpstreamer.retrofit.PassData;
+import com.pedro.rtpstreamer.retrofit.PassResponse;
+import com.pedro.rtpstreamer.retrofit.RetrofitClient;
+import com.pedro.rtpstreamer.retrofit.ServiceApi;
 import com.pedro.rtpstreamer.utils.ActivityLink;
 
 import static android.os.Build.VERSION_CODES.JELLY_BEAN;
 import static android.os.Build.VERSION_CODES.JELLY_BEAN_MR2;
 import static android.os.Build.VERSION_CODES.LOLLIPOP;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
   private Button btEvaluation;
+  private Button btCheck;
   private ActivityLink link;
   private AnimatedSvgView svgView;
   private Spinner spinner;
@@ -51,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   private String[] items;
   private String selectedPoomsae;
   private String userName;
+  private ServiceApi service;
 
   private final String[] PERMISSIONS = {
       Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA,
@@ -65,11 +80,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     btEvaluation = findViewById(R.id.buttonEvaluation);
     btEvaluation.setOnClickListener(this);
+    btCheck = findViewById(R.id.buttonCheck);
+    btCheck.setOnClickListener(this);
 
     svgView = (AnimatedSvgView) findViewById(R.id.animated_svg_view2);
     svgView.start();
 
     userName = getIntent().getStringExtra("userName");
+
+    service = RetrofitClient.getClient().create(ServiceApi.class);
 
     items = getResources().getStringArray(R.array.poomsae_array);
     spinner = findViewById(R.id.spinner);
@@ -118,9 +137,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           }
         }
         break;
+      case R.id.buttonCheck:
+        if (selectedPoomsae.equals("-- Select Poomsae --") || selectedPoomsae == null) {
+          Toast.makeText(MainActivity.this, "Poomsae is not selected.", Toast.LENGTH_SHORT).show();
+        } else {
+          checkPass(userName);
+        }
+        break;
       default:
         break;
     }
+  }
+
+  private void checkPass(String userName){
+    PassData data = new PassData(userName);
+
+    service.userPass(data).enqueue(new Callback<PassResponse>() {
+      @Override
+      public void onResponse(Call<PassResponse> call, Response<PassResponse> response) {
+        PassResponse result = response.body();
+        if (result.getCode() == 200) {
+          new AlertDialog.Builder(MainActivity.this)
+                  .setTitle("Checking your evaluation history")
+                  .setMessage(result.getPass())
+                  .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                  })
+                  .show();
+        } else {
+          Toast.makeText(MainActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+      }
+
+      @Override
+      public void onFailure(Call<PassResponse> call, Throwable t) {
+        Toast.makeText(MainActivity.this, "Check Error", Toast.LENGTH_SHORT).show();
+        Log.e("결과 확인 에러 발생", t.getMessage());
+        t.printStackTrace();
+      }
+    });
   }
 
   private void showMinSdkError(int minSdk) {
